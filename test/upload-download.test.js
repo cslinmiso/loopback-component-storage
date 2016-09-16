@@ -219,6 +219,21 @@ describe('storage service', function () {
       });
   });
 
+  it('returns error when no file is provided to upload', function(done) {
+    request('http://localhost:' + app.get('port'))
+      .post('/imageContainers/album1/upload')
+      .set('Accept', 'application/json')
+      .set('Connection', 'keep-alive')
+      .expect('Content-Type', /json/)
+      .expect(400, function(err, res) {
+        var indexOfMsg =
+          res.body.error.message.toLowerCase().indexOf('no file');
+        assert.notEqual(indexOfMsg, -1,
+          'Error message does not contain \"no file\"');
+        done(err);
+      });
+  });
+
   it('should get file by name', function (done) {
 
     request('http://localhost:' + app.get('port'))
